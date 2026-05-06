@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: faceuser
+      POSTGRES_PASSWORD: facepass
+      POSTGRES_DB: facedb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U faceuser -d facedb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal
+
+  # ── Backend (FastAPI) ───────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: faceuser
+      POSTGRES_PASSWORD: facepass
+      POSTGRES_DB: facedb
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      CORS_ORIGINS: "http://localhost:3000,http://frontend:3000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # ── Frontend (React + Nginx) ────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+volumes:
+  pg_data:
+
+networks:
+  internal:
+    driver: bridge

@@ -1,0 +1,148 @@
+/* App.css — dark theme, clean layout */
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --border: #2a2d3a;
+  --accent: #6c63ff;
+  --accent-red: #ff4d4d;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --green: #22c55e;
+  --red: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── Header ── */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 28px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.header-left { display: flex; align-items: center; gap: 10px; }
+.logo { font-size: 1.6rem; color: var(--accent); }
+h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: 0.01em; }
+.header-right { display: flex; align-items: center; gap: 14px; }
+
+.status-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+.status-dot.connected { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.status-dot.disconnected { background: var(--red); }
+.status-label { font-size: 0.85rem; color: var(--text-muted); }
+.face-badge {
+  background: var(--accent);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Main layout ── */
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  flex: 1;
+}
+@media (max-width: 900px) {
+  .app-main { grid-template-columns: 1fr; }
+}
+
+section h2 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+/* ── Video Feed ── */
+.video-feed {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.frame-display {
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.feed-img { width: 100%; height: auto; display: block; }
+.feed-placeholder {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  color: var(--text-muted); font-size: 0.9rem;
+}
+.feed-placeholder span { font-size: 2.5rem; }
+
+.feed-controls { display: flex; align-items: center; gap: 16px; }
+.btn {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn-start { background: var(--accent); color: #fff; }
+.btn-stop { background: var(--red); color: #fff; }
+.frame-counter { font-size: 0.8rem; color: var(--text-muted); }
+.error-msg { color: var(--red); font-size: 0.85rem; }
+
+/* ── ROI Table ── */
+.roi-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  overflow: auto;
+  max-height: 520px;
+}
+.roi-header {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 12px;
+  font-size: 0.85rem; color: var(--text-muted);
+}
+.loading-dot { color: var(--accent); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.no-data { color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 24px; }
+
+.roi-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.roi-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-weight: 600;
+  position: sticky; top: 0;
+  background: var(--surface);
+}
+.roi-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.roi-table tr:last-child td { border-bottom: none; }
+.roi-table tr:hover td { background: rgba(108,99,255,0.06); }
